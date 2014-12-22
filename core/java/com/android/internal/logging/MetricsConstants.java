@@ -21,6 +21,8 @@ package com.android.internal.logging;
  * @hide
  */
 public interface MetricsConstants {
+    // Navigation dimension settings
+    public static final int NAV_DIMENSION_SETTINGS = 250;
     public static final int DONT_TRACK_ME_BRO = -Integer.MAX_VALUE + 1;
     // These constants must match those in the analytic pipeline, do not edit.
     // Add temporary values to the top of MetricsLogger instead.
