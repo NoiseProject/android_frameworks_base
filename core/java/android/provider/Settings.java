@@ -3432,6 +3432,7 @@ public final class Settings {
          * Use display power saving features such as CABC or CABL
          * @hide
          */
+
         public static final String DISPLAY_LOW_POWER = "display_low_power";
 
         /**
