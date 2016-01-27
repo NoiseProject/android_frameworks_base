@@ -32,12 +32,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Message;
-<<<<<<< HEAD
-=======
-import android.os.PowerManager;
 import android.os.UserHandle;
-import android.provider.Settings;
->>>>>>> 5814928... [1/2] Display cursor buttons in navigation bar while typing.
 import android.os.RemoteException;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -200,21 +195,8 @@ public class NavigationBarView extends LinearLayout {
         getIcons(res);
 
         mBarTransitions = new NavigationBarTransitions(this);
-<<<<<<< HEAD
-=======
-
-        mDoubleTapGesture = new GestureDetector(mContext,
-                new GestureDetector.SimpleOnGestureListener() {
-            @Override
-            public boolean onDoubleTap(MotionEvent e) {
-                PowerManager pm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
-                if (pm != null) pm.goToSleep(e.getEventTime());
-                return true;
-            }
-        });
 
         mSettingsObserver = new SettingsObserver(new Handler());
->>>>>>> 5814928... [1/2] Display cursor buttons in navigation bar while typing.
     }
 
     @Override
