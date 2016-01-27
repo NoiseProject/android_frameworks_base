@@ -6314,9 +6314,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                         }
                     };
                     if (mContext.getPackageManager().isUpgrade()) {
-                        mBootMsgDialog.setTitle(R.string.android_upgrading_title);
+                        mBootMsgDialog.setTitle(R.string.np_upgrading_title);
                     } else {
-                        mBootMsgDialog.setTitle(R.string.android_start_title);
+                        mBootMsgDialog.setTitle(R.string.np_start_title);
                     }
                     mBootMsgDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
                     mBootMsgDialog.setIndeterminate(true);
