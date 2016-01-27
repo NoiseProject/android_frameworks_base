@@ -18,6 +18,7 @@ package com.android.systemui.statusbar.policy;
 
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.hardware.input.InputManager;
@@ -58,6 +59,7 @@ public class KeyButtonView extends ImageView {
     private boolean mInEditMode;
     private AudioManager mAudioManager;
     private boolean mGestureAborted;
+    private boolean mPerformedLongClick;
 
     private final Runnable mCheckLongPress = new Runnable() {
         public void run() {
@@ -74,6 +76,7 @@ public class KeyButtonView extends ImageView {
                     sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_LONG_CLICKED);
                 } else if (isLongClickable()) {
                     // Just an old-fashioned ImageView
+                    mPerformedLongClick = true;
                     performLongClick();
                 }
             }
@@ -265,12 +268,18 @@ public class KeyButtonView extends ImageView {
                     }
                 } else {
                     // no key code, just a regular ImageView
-                    if (doIt) {
+                    if (doIt && !mPerformedLongClick) {
                         performClick();
                     }
                 }
 
                 removeCallbacks(mCheckLongPress);
+
+                if (supportsLongPress()) {
+                    removeCallbacks(mCheckLongPress);
+                }
+
+                mPerformedLongClick = false;
                 break;
         }
 

@@ -116,7 +116,6 @@ import android.view.animation.AnimationSet;
 import android.view.animation.AnimationUtils;
 import com.android.internal.R;
 import com.android.internal.statusbar.IStatusBarService;
-import com.android.internal.util.chroma.DevUtils;
 import com.android.internal.util.chroma.DimensionConverter;
 import com.android.internal.util.ScreenShapeHelper;
 import com.android.internal.widget.PointerLocationView;
@@ -752,6 +751,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.VOLUME_WAKE_SCREEN), false, this,
+                    UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.NAVIGATION_BAR_HEIGHT), false, this,
                     UserHandle.USER_ALL);
