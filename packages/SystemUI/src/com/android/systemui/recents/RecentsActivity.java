@@ -257,9 +257,6 @@ public class RecentsActivity extends Activity implements RecentsView.RecentsView
 
             findViewById(R.id.floating_action_button).setVisibility(View.VISIBLE);
 
-            boolean showSearchBar = Settings.System.getInt(getContentResolver(),
-                       Settings.System.RECENTS_SHOW_SEARCH_BAR, 1) == 1;
-
             if (mRecentsView.hasValidSearchBar()) {
                 mRecentsView.setSearchBarVisibility(View.VISIBLE);
             } else {
