@@ -266,6 +266,7 @@ public interface MetricsConstants {
     public static final int TUNER_BATTERY_PERCENTAGE = 237;
     public static final int FUELGAUGE_INACTIVE_APPS = 238;
     public static final int NETWORK_TRAFFIC_SETTINGS= 250;
+    public static final int CARRIER_OPTIONS = 251;
 
 
     // These constants must match those in the analytic pipeline, do not edit.
