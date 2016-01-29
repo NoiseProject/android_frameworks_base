@@ -87,8 +87,6 @@ public class StatusBarIconController implements Tunable {
     private boolean mShowClock;
     private int mClockLocation;
     private NetworkTraffic mNetworkTraffic;
-    private ClockController mClockController;
-    private View mCenterClockLayout;
     private TextView mCarrier;
 
 
@@ -445,7 +443,6 @@ public class StatusBarIconController implements Tunable {
         mBatteryMeterView.setDarkIntensity(mDarkIntensity);
         mClock.setTextColor(mIconTint);
         mNetworkTraffic.setDarkIntensity(mDarkIntensity);
-        mClockController.setTextColor(mIconTint);
         mCarrier.setTextColor(mIconTint);
         applyNotificationIconsTint();
     }
