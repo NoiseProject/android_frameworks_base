@@ -30,6 +30,7 @@ import android.content.res.Configuration;
 import android.database.ContentObserver;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.net.Uri;
@@ -231,8 +232,8 @@ public class NotificationPanelView extends PanelView implements
 
     private Handler mHandler = new Handler();
     private SettingsObserver mSettingsObserver;
-
     private boolean mOneFingerQuickSettingsIntercept;
+
     private boolean mDoubleTapToSleepEnabled;
     private int mStatusBarHeaderHeight;
     private GestureDetector mDoubleTapGesture;
@@ -302,6 +303,7 @@ public class NotificationPanelView extends PanelView implements
                 }
             }
         });
+        mSettingsObserver = new SettingsObserver(mHandler);
     }
 
     @Override
@@ -403,11 +405,9 @@ public class NotificationPanelView extends PanelView implements
         updateMaxHeadsUpTranslation();
     }
 
-
     @Override
     public void onAttachedToWindow() {
         mSettingsObserver.observe();
-
     }
 
     @Override
@@ -860,6 +860,10 @@ public class NotificationPanelView extends PanelView implements
         final int pointerCount = event.getPointerCount();
         final int action = event.getActionMasked();
 
+        final boolean oneFingerDrag = action == MotionEvent.ACTION_DOWN
+                && mOneFingerQuickSettingsIntercept && shouldQuickSettingsIntercept
+                        (event.getX(), event.getY(), -1, false);
+
         final boolean twoFingerDrag = action == MotionEvent.ACTION_POINTER_DOWN
                 && pointerCount == 2;
 
@@ -871,7 +875,7 @@ public class NotificationPanelView extends PanelView implements
                 && (event.isButtonPressed(MotionEvent.BUTTON_SECONDARY)
                         || event.isButtonPressed(MotionEvent.BUTTON_TERTIARY));
 
-        return twoFingerDrag || stylusButtonClickDrag || mouseButtonClickDrag;
+        return oneFingerDrag || twoFingerDrag || stylusButtonClickDrag || mouseButtonClickDrag;
     }
 
     private void handleQsDown(MotionEvent event) {
@@ -1535,22 +1539,22 @@ public class NotificationPanelView extends PanelView implements
      * @return Whether we should intercept a gesture to open Quick Settings.
      */
     private boolean shouldQuickSettingsIntercept(float x, float y, float yDiff, boolean useHeader) {
-        if (!mQsExpansionEnabled || mCollapsedOnDown) {
+        if (!mQsExpansionEnabled) {
             return false;
         }
         View header = mKeyguardShowing ? mKeyguardStatusBar : mHeader;
         boolean onHeader = useHeader && x >= header.getX() && x <= header.getX() + header.getWidth()
                 && y >= header.getTop() && y <= header.getBottom();
 
-        final float w = getMeasuredWidth();
+        final float w = (header.getX() + header.getWidth());
         float region = (w * (1.f/3.f)); // TODO overlay region fraction?
-        final boolean showQsOverride = isLayoutRtl() ? (x < region) : (w - region < x)
-                        && mStatusBarState == StatusBarState.SHADE;
+
+        boolean showQsOverride = isLayoutRtl() ? (x < region) : (w - region < x);
 
         if (mQsExpanded) {
             return onHeader || (mScrollView.isScrolledToBottom() && yDiff < 0) && isInQsArea(x, y);
         } else {
-            return onHeader || showQsOverride;
+            return onHeader || (showQsOverride && mStatusBarState == StatusBarState.SHADE);
         }
     }
 
