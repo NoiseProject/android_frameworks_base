@@ -2444,12 +2444,6 @@ public final class Settings {
          */
         public static final String STATUS_BAR_QUICK_QS_PULLDOWN = "status_bar_quick_qs_pulldown";
 
-         /**
-         * Whether to show four tiles per row.
-         * @hide
-         */
-        public static final String QS_USE_FOUR_COLUMNS = "qs_use_four_columns";
-
         /**
          * The keyboard brightness to be used while the screen is on.
          * Valid value range is between 0 and {@link PowerManager#getMaximumKeyboardBrightness()}

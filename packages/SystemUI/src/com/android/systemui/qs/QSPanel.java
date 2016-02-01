@@ -29,6 +29,8 @@ import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemProperties;
+import android.os.UserHandle;
+import android.provider.Settings;
 import android.util.AttributeSet;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -68,7 +70,6 @@ public class QSPanel extends ViewGroup {
     private final H mHandler = new H();
 
     private int mColumns;
-    private int mNumberOfColumns;
     private int mCellWidth;
     private int mCellHeight;
     private int mLargeCellWidth;
@@ -80,8 +81,6 @@ public class QSPanel extends ViewGroup {
     private boolean mExpanded;
     private boolean mListening;
     private boolean mClosingDetail;
-	
-    private boolean mUseFourColumns;
 
     private Record mDetailRecord;
     private Callback mCallback;
@@ -132,19 +131,6 @@ public class QSPanel extends ViewGroup {
         });
     }
 
-    /**
-     * Use three or four columns.
-     */
-    private int useFourColumns() {
-        final Resources res = mContext.getResources();
-        if (mUseFourColumns) {
-            mNumberOfColumns = 4;
-        } else {
-            mNumberOfColumns = res.getInteger(R.integer.quick_settings_num_columns);
-        }
-        return mNumberOfColumns;
-    }
-
     private void updateDetailText() {
         mDetailDoneButton.setText(R.string.quick_settings_done);
         mDetailSettingsButton.setText(R.string.quick_settings_more_settings);
@@ -173,21 +159,9 @@ public class QSPanel extends ViewGroup {
 
     public void updateResources() {
         final Resources res = mContext.getResources();
-        int numColumns = res.getInteger(R.integer.quick_settings_num_columns);
-        if (SystemProperties.getInt("ro.notif_expand_landscape", 0) == 1) {
-            final Display display = ((WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-            int rotation = display.getRotation();
-            if ((rotation == Surface.ROTATION_90) || (rotation == Surface.ROTATION_270)) {
-	        numColumns = res.getInteger(R.integer.quick_settings_num_columns_landscape);
-            }
-        }
-        final int columns = Math.max(1, useFourColumns);
+        final int columns = Math.max(1, res.getInteger(R.integer.quick_settings_num_columns));
         mCellHeight = res.getDimensionPixelSize(R.dimen.qs_tile_height);
-        if (mUseFourColumns) {
-            mCellWidth = (int)(mCellHeight * TILE_ASPECT_SMALL);
-        } else {
-            mCellWidth = (int)(mCellHeight * TILE_ASPECT);
-        }
+        mCellWidth = (int)(mCellHeight * TILE_ASPECT);
         mLargeCellHeight = res.getDimensionPixelSize(R.dimen.qs_dual_tile_height);
         mLargeCellWidth = (int)(mLargeCellHeight * TILE_ASPECT);
         mPanelPaddingBottom = res.getDimensionPixelSize(R.dimen.qs_panel_padding_bottom);
@@ -687,17 +661,13 @@ public class QSPanel extends ViewGroup {
         void onToggleStateChanged(boolean state);
         void onScanStateChanged(boolean state);
     }
-
-    private class SettingsObserver extends ContentObserver {
+   private class SettingsObserver extends ContentObserver {
         SettingsObserver(Handler handler) {
             super(handler);
         }
 
         void observe() {
             ContentResolver resolver = mContext.getContentResolver();
-            resolver.registerContentObserver(Settings.Secure.getUriFor(
-                    Settings.Secure.QS_USE_FOUR_COLUMNS),
-                    false, this, UserHandle.USER_ALL);
             update();
         }
 
@@ -719,9 +689,6 @@ public class QSPanel extends ViewGroup {
 
         public void update() {
             ContentResolver resolver = mContext.getContentResolver();
-            mUseFourColumns = Settings.Secure.getIntForUser(
-            mContext.getContentResolver(), Settings.Secure.QS_USE_FOUR_COLUMNS,
-                0, UserHandle.USER_CURRENT) == 1;
         }
     }
 }
