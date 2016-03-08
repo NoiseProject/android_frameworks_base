@@ -2793,6 +2793,7 @@ public class PackageManagerService extends IPackageManager.Stub {
         }
 
         return -1;
+
     }
 
     @Override
