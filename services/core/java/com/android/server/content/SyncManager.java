@@ -2646,6 +2646,9 @@ public class SyncManager {
                                     + " now: " + now);
                         }
                         continue;
+                    }
+                    // Add this sync to be run.
+                    operations.add(op);
                 }
 
                 for (Integer user : removedUsers) {
